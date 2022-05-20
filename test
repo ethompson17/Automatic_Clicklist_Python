@@ -1,0 +1,5 @@
+from requests_html import HTMLSession
+
+session = HTMLSession()
+r = session.get('https://www.meijer.com/shopping/product/roma-tomato/4087.html')
+r.html.render()
