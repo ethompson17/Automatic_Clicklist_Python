@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import selenium
 from selenium import webdriver
 
 
@@ -13,16 +12,22 @@ class Roma_Tomatoes:
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'}
         kroger_roma_tomatoes_page = requests.get(kroger_url, headers=headers)
         kroger_roma_tomatoes_soup = BeautifulSoup(kroger_roma_tomatoes_page.content, 'html.parser')
-        kroger_roma_tomatoes_price = kroger_roma_tomatoes_soup.find('span', class_='kds-Text--l mr-8 text-default-900 ProductDetails-sellBy').text
+        kroger_roma_tomatoes_price = kroger_roma_tomatoes_soup.find('span', class_='kds-Text--l mr-8 text-default-900 ProductDetails-sellBy').text.replace('$', '').replace('/lb', '')
 
         print(kroger_roma_tomatoes_price)
 
     def meijer_roma_tomatoes(self):
-        meijer_url = 'https://www.meijer.com/shopping/product/roma-tomato/4087.html'
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'}
-        meijer_roma_tomatoes_page = requests.get(meijer_url, headers=headers)
-        meijer_roma_tomatoes_soup = BeautifulSoup(meijer_roma_tomatoes_page.content, 'html.parser')
-        meijer_roma_tomatoes_price = meijer_roma_tomatoes_soup.select('span', class_ = 'product-info__description')
+        PATH = 'C:\Program Files (x86)\chromedriver.exe'
+        driver = webdriver.Chrome(PATH)
+        driver.get('https://www.meijer.com/shopping/product/roma-tomato/4087.html')
+
+        html = driver.page_source
+
+        #meijer_url = 'https://www.meijer.com/shopping/product/roma-tomato/4087.html'
+        #headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'}
+        #meijer_roma_tomatoes_page = requests.get(meijer_url, headers=headers)
+        meijer_roma_tomatoes_soup = BeautifulSoup(html)
+        meijer_roma_tomatoes_price = meijer_roma_tomatoes_soup.find('span', class_ = 'product-info__description')
 
         print(meijer_roma_tomatoes_price)
 
@@ -31,7 +36,7 @@ class Roma_Tomatoes:
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'}
         gordon_roma_tomatoes_page = requests.get(gordon_url)
         gordon_roma_tomatoes_soup = BeautifulSoup(gordon_roma_tomatoes_page.content, 'html.parser')
-        gordon_roma_tomatoes_price = gordon_roma_tomatoes_soup.find('span', class_='unit_price').text
+        gordon_roma_tomatoes_price = gordon_roma_tomatoes_soup.find('span', class_='unit_price').text.replace('$', '')
 
         print(gordon_roma_tomatoes_price)
 
@@ -49,9 +54,9 @@ rt = Roma_Tomatoes()
 #list(rt.kroger_roma_tomatoes(), rt.gordon_roma_tomatoes())
 
 rt.kroger_roma_tomatoes()
-rt.meijer_roma_tomatoes()
+#rt.meijer_roma_tomatoes()
 rt.gordon_roma_tomatoes()
-rt.buschs_roma_tomatoes()
+#rt.buschs_roma_tomatoes()
 
 
 
